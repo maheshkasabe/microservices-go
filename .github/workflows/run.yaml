@@ -1,19 +1,12 @@
-name: on merged
 on:
-  pull_request:
-    branches:
-      - main
+  pull_request_target:
     types:
-      - merged
-      
+      - closed
+
 jobs:
-  
-  build:
-    
-    name: Build & Push Image to ECR
+  if_merged:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    
     steps:
-    
-    - name: build docker-compose file
-      run: docker-compose -f docker-compose.yml build
+    - run: |
+        echo The PR was merged
