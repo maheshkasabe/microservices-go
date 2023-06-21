@@ -1,19 +1,28 @@
+name: Deploy to ECR
+
 on:
-  pull_request_target:
-    types:
-      - closed
+ push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
 
 jobs:
-  if_merged:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    
+   
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
 
-    - name: Start containers
-      run: docker-compose -f "docker-compose.yml" up -d --build
-    
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Build the Docker-compose file
+      run: docker-compose -f "docker-compose.yaml" up -d --build
+
     - name: Show containers
-      run: docker images
+      run: docker ps -a
+    
+    - name: Set outputs
+      id: vars
+      if: ${{ github.ref == 'refs/heads/master' }}
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
