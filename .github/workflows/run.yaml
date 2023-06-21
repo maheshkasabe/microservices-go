@@ -24,5 +24,14 @@ jobs:
     - name: Set outputs
       id: vars
       if: ${{ github.ref == 'refs/heads/main' }}
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          
+          
+    - name: Show images
       run: docker images #echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        
+        
+    - name: docker-compose down
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: docker-compose down #echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       
